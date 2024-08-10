@@ -1,4 +1,3 @@
-# Weather App
 # Social Media Post Application
 
 A simple social media post application built with React and Material-UI (MUI). This application allows users to create posts, view posts from all users, like posts, and manage user authentication.
