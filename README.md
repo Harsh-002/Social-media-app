@@ -1,70 +1,68 @@
-# Getting Started with Create React App
+# Weather App
+# Social Media Post Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple social media post application built with React and Material-UI (MUI). This application allows users to create posts, view posts from all users, like posts, and manage user authentication.
 
-## Available Scripts
+Live Demo : https://social-media-app-30daysjs.netlify.app/
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+-   **User Authentication:**  Login and logout functionality.
+-   **Create Posts:**  Users can create new posts with text and an image.
+-   **View All Posts:**  Displays all posts from all users, with the logged-in user's posts highlighted.
+-   **Like Posts:**  Users can like or unlike posts.
+-   **Responsive Design:**  The application is responsive and works on various screen sizes.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Technologies Used
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+-   **React:**  JavaScript library for building user interfaces.
+-   **Material-UI (MUI):**  React component library for styling and UI components.
+-   **React Router:**  For navigation between different pages.
+-   **Local Storage:**  To persist user data and posts.
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
 
-### `npm run build`
+Make sure you have the following installed:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+-   Node.js (v14 or later)
+-   npm (v6 or later)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Installation
 
-### `npm run eject`
+1. Clone the repository:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   ```bash
+   git clone https://github.com/Harsh-002/Social-media-app.git
+   
+   
+2. Navigate to project directory:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+   ```bash
+   cd social-media-app
+   
+3. Install dependencies:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   ```bash
+   npm install
+   
+4. Start development server:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   ```bash
+   npm start
+    
 
-## Learn More
+### Usage
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1.  **Login:**  On the login page, enter your username and password to access the application.
+2.  **Create Post:**  Navigate to "Add new post" to create a new post. You can add text and an image.
+3.  **View Posts:**  Navigate to "All Posts" to see all posts from all users. Your posts will be highlighted.
+4.  **Like Posts:**  Click the heart icon to like a post. The number of likes will update accordingly.
+5.  **Logout:**  Use the logout button to log out of the application.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Customization
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-   **Styling:**  The application uses Material-UI for styling. You can customize the theme by modifying the MUI theme settings.
+-   **Components:**  You can extend or modify the existing components to add more features or change the behavior of the application.
