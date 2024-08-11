@@ -7,7 +7,7 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { Add, ImageSharp } from "@mui/icons-material";
+import { Add, ImageSharp, Notifications, Person } from "@mui/icons-material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ const Navbar = ({ user, setIsLoggedIn }) => {
   const handleLogout = () => {
     setIsLoggedIn(false);
     navigate("/login");
-    localStorage.removeItem("loggedInUser");
+    sessionStorage.removeItem("loggedInUser");
   };
 
   return (
@@ -68,6 +68,24 @@ const Navbar = ({ user, setIsLoggedIn }) => {
             <ImageSharp />
           </ListItemIcon>
           <ListItemText primary="All Posts" />
+        </ListItemButton>
+        <ListItemButton
+          selected={selectedIndex === 2}
+          onClick={(event) => handleListItemClick(event, 2, "profile")}
+        >
+          <ListItemIcon>
+            <Person />
+          </ListItemIcon>
+          <ListItemText primary="Your Profile" />
+        </ListItemButton>
+        <ListItemButton
+          selected={selectedIndex === 3}
+          onClick={(event) => handleListItemClick(event, 3, "notifications")}
+        >
+          <ListItemIcon>
+            <Notifications />
+          </ListItemIcon>
+          <ListItemText primary="Notifications" />
         </ListItemButton>
       </List>
       <Button

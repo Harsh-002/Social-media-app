@@ -27,10 +27,10 @@ const CreatePost = () => {
 
   const handleSubmit = () => {
     // Retrieve the current user from local storage
-    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const loggedInUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
 
     //Get all users data from local storage
-    const allUsers = JSON.parse(localStorage.getItem("allUsers"));
+    const allUsers = JSON.parse(sessionStorage.getItem("allUsers"));
 
     if (loggedInUser) {
       // Create a new post object
@@ -53,15 +53,15 @@ const CreatePost = () => {
       const updatedUser = { ...loggedInUser, posts: updatedPosts };
 
       // Save the updated user object back to local storage
-      localStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
+      sessionStorage.setItem("loggedInUser", JSON.stringify(updatedUser));
 
       // Update the allUsers array with the updated user
       const updatedUsers = allUsers.map((user) =>
         user.username === loggedInUser.username ? updatedUser : user
       );
 
-      // Save updated all users array to localstorage
-      localStorage.setItem("allUsers", JSON.stringify(updatedUsers));
+      // Save updated all users array to sessionStorage
+      sessionStorage.setItem("allUsers", JSON.stringify(updatedUsers));
 
       // Clear the input fields after submission
       setPostText("");

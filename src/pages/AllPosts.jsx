@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Container, Typography } from "@mui/material";
-import Post from "./Post";
+import Post from "../components/Post";
 
 const AllPosts = () => {
   const [allPosts, setAllPosts] = useState([]);
@@ -8,11 +8,11 @@ const AllPosts = () => {
 
   useEffect(() => {
     // Retrieve the logged-in user
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
+    const user = JSON.parse(sessionStorage.getItem("loggedInUser"));
     setLoggedInUser(user);
 
     // Retrieve all users and their posts from local storage
-    const users = JSON.parse(localStorage.getItem("allUsers")) || [];
+    const users = JSON.parse(sessionStorage.getItem("allUsers")) || [];
 
     // Collect all posts with associated user information
     const posts = users.flatMap((user) =>
@@ -22,14 +22,12 @@ const AllPosts = () => {
         image: post.image,
         timestamp: post.timestamp,
         likes: post.likes,
+        comments: post.comments,
       }))
     );
 
-    // Only set allPosts if it's currently empty to avoid duplicates
-    if (allPosts.length === 0) {
-      setAllPosts(posts);
-    }
-  }, [allPosts]);
+    setAllPosts(posts);
+  }, []);
 
   return (
     <Container sx={{ width: "80%" }}>

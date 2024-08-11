@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const Register = ({
+const Login = ({
   user,
   setUser,
   isLoggedIn,
@@ -26,30 +26,29 @@ const Register = ({
   };
 
   useEffect(() => {
-    const storedUsers = localStorage.getItem("allUsers");
+    const storedUsers = sessionStorage.getItem("allUsers");
     if (storedUsers) {
       setAllUsers(JSON.parse(storedUsers));
     }
   }, [setAllUsers]);
 
-  const handleRegister = () => {
+  const handleLogin = () => {
     if (!user.username || !user.password) {
       alert("Both fields are required.");
       return;
     }
 
-    const userExists = allUsers.some((u) => u.username === user.username);
+    const userExist = allUsers.filter((u) => u.username === user.username);
 
-    if (userExists) {
-      setError("User already exists!");
+    console.log(userExist, user);
+
+    if (userExist.length === 0) {
+      setError("User doesn't exist");
+    } else if (userExist[0].password !== user.password) {
+      setError("Invalid Password!");
     } else {
-      // Store the user data in localStorage upon login
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
-
-      const updatedUsers = [...allUsers, user];
-      setAllUsers(updatedUsers);
-      localStorage.setItem("allUsers", JSON.stringify(updatedUsers));
-
+      // Store the user data in sessionStorage upon login
+      sessionStorage.setItem("loggedInUser", JSON.stringify(user));
       setIsLoggedIn(true);
       console.log("User logged in:", user);
     }
@@ -85,7 +84,7 @@ const Register = ({
         }}
       >
         <Typography sx={{ textAlign: "center", fontSize: "1.5rem" }}>
-          Register
+          Login
         </Typography>
         {error && (
           <Typography sx={{ color: "red", textAlign: "center" }}>
@@ -121,9 +120,9 @@ const Register = ({
               fontWeight: "600",
               ":hover": { backgroundColor: "Highlight" },
             }}
-            onClick={handleRegister}
+            onClick={handleLogin}
           >
-            Register
+            Login
           </Button>
         </FormControl>
         <Typography
@@ -132,13 +131,13 @@ const Register = ({
             cursor: "pointer",
             ":hover": { color: "burlywood" },
           }}
-          onClick={() => navigate("/login")}
+          onClick={() => navigate("/register")}
         >
-          Already have an account? Login
+          Don't have an account? Register
         </Typography>
       </Box>
     </Container>
   );
 };
 
-export default Register;
+export default Login;

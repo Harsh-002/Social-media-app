@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const Login = ({
+const Register = ({
   user,
   setUser,
   isLoggedIn,
@@ -18,6 +18,7 @@ const Login = ({
   setAllUsers,
 }) => {
   const [error, setError] = useState(null);
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -26,29 +27,35 @@ const Login = ({
   };
 
   useEffect(() => {
-    const storedUsers = localStorage.getItem("allUsers");
+    const storedUsers = sessionStorage.getItem("allUsers");
     if (storedUsers) {
       setAllUsers(JSON.parse(storedUsers));
     }
   }, [setAllUsers]);
 
-  const handleLogin = () => {
-    if (!user.username || !user.password) {
-      alert("Both fields are required.");
+  const handleRegister = () => {
+    if (!user.username || !user.email || !user.password || !confirmPassword) {
+      alert("All fields are required.");
       return;
     }
 
-    const userExist = allUsers.filter((u) => u.username === user.username);
+    if (user.password !== confirmPassword) {
+      alert("Password and confirm password doesn't match");
+      return;
+    }
 
-    console.log(userExist, user);
+    const userExists = allUsers.some((u) => u.username === user.username);
 
-    if (userExist.length === 0) {
-      setError("User doesn't exist");
-    } else if (userExist[0].password !== user.password) {
-      setError("Invalid Password!");
+    if (userExists) {
+      setError("User already exists!");
     } else {
-      // Store the user data in localStorage upon login
-      localStorage.setItem("loggedInUser", JSON.stringify(user));
+      // Store the user data in sessionStorage upon login
+      sessionStorage.setItem("loggedInUser", JSON.stringify(user));
+
+      const updatedUsers = [...allUsers, user];
+      setAllUsers(updatedUsers);
+      sessionStorage.setItem("allUsers", JSON.stringify(updatedUsers));
+
       setIsLoggedIn(true);
       console.log("User logged in:", user);
     }
@@ -77,14 +84,14 @@ const Login = ({
           gap: "20px",
           border: "1px solid gray",
           width: "25%",
-          height: "50%",
+          height: "auto",
           borderRadius: "20px",
           padding: "20px 40px",
           justifyContent: "space-evenly",
         }}
       >
         <Typography sx={{ textAlign: "center", fontSize: "1.5rem" }}>
-          Login
+          Register
         </Typography>
         {error && (
           <Typography sx={{ color: "red", textAlign: "center" }}>
@@ -104,6 +111,16 @@ const Login = ({
             required
           />
           <TextField
+            id="email"
+            name="email"
+            label="Email"
+            type="email"
+            variant="outlined"
+            value={user.email}
+            onChange={handleInputChange}
+            required
+          />
+          <TextField
             id="password"
             name="password"
             label="Password"
@@ -113,6 +130,16 @@ const Login = ({
             onChange={handleInputChange}
             required
           />
+          <TextField
+            id="confirmPassword"
+            name="confirmPassword"
+            label="Cornfirm Password"
+            type="password"
+            variant="outlined"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
           <Button
             sx={{
               backgroundColor: "burlywood",
@@ -120,9 +147,9 @@ const Login = ({
               fontWeight: "600",
               ":hover": { backgroundColor: "Highlight" },
             }}
-            onClick={handleLogin}
+            onClick={handleRegister}
           >
-            Login
+            Register
           </Button>
         </FormControl>
         <Typography
@@ -131,13 +158,13 @@ const Login = ({
             cursor: "pointer",
             ":hover": { color: "burlywood" },
           }}
-          onClick={() => navigate("/register")}
+          onClick={() => navigate("/login")}
         >
-          Don't have an account? Register
+          Already have an account? Login
         </Typography>
       </Box>
     </Container>
   );
 };
 
-export default Login;
+export default Register;

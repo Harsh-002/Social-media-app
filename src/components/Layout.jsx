@@ -31,7 +31,7 @@ const Layout = ({ setIsLoggedIn, user, isLoggedIn }) => {
           justifySelf: "flex-end",
         }}
       >
-        <Outlet />
+        <Outlet user={user} />
       </div>
     </div>
   );

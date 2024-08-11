@@ -1,20 +1,28 @@
 import "./App.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "./components/Login";
+import Login from "./pages/Login";
 import Layout from "./components/Layout";
-import AddPost from "./components/AddPost";
+import AddPost from "./pages/AddPost";
 import { useEffect, useState } from "react";
-import Register from "./components/Register";
-import AllPosts from "./components/AllPosts";
+import Register from "./pages/Register";
+import AllPosts from "./pages/AllPosts";
+import Profile from "./pages/Profile";
+import Notifications from "./pages/Notifications";
 
 function App() {
-  const [user, setUser] = useState({ username: "", password: "" });
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    email: "",
+    profileImage: "",
+    posts: [],
+  });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [allUsers, setAllUsers] = useState([]);
 
   useEffect(() => {
     // Check if a user is already logged in
-    const storedUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    const storedUser = JSON.parse(sessionStorage.getItem("loggedInUser"));
     if (storedUser) {
       setUser(storedUser);
       setIsLoggedIn(true);
@@ -63,6 +71,8 @@ function App() {
         >
           <Route path="/addpost" element={<AddPost />} />
           <Route path="/allpost" element={<AllPosts />} />
+          <Route path="/profile" element={<Profile user={user} />} />
+          <Route path="/notifications" element={<Notifications />} />
         </Route>
       </Routes>
     </Router>
