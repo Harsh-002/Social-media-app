@@ -15,18 +15,32 @@ import SendOutlined from "@mui/icons-material/SendOutlined";
 import Face from "@mui/icons-material/Face";
 import BookmarkBorderRoundedIcon from "@mui/icons-material/BookmarkBorderRounded";
 import { Star } from "@mui/icons-material";
+import NotificationContext from "../context/NotificationContext";
 
 export default function Post({ post, loggedInUser }) {
+  const { addNotification } = React.useContext(NotificationContext);
   const [likes, setLikes] = React.useState(post.likes);
   const [isLiked, setIsLiked] = React.useState(false);
+
+  const [comments, setComments] = React.useState(post.comments || []);
+  const [commentText, setCommentText] = React.useState("");
+  const [showComments, setShowComments] = React.useState(false);
 
   const handleLike = () => {
     const updatedLikes = isLiked ? likes - 1 : likes + 1;
     setLikes(updatedLikes);
     setIsLiked(!isLiked);
 
+    if (!isLiked) {
+      addNotification({
+        type: "like",
+        message: `${loggedInUser.username}: liked your post!`,
+        postId: post.timestamp,
+      });
+    }
+
     // Retrieve all users from local storage
-    const allUsers = JSON.parse(localStorage.getItem("allUsers"));
+    const allUsers = JSON.parse(sessionStorage.getItem("allUsers"));
 
     // Find the logged-in user in the users array
     const userIndex = allUsers.findIndex(
@@ -38,11 +52,59 @@ export default function Post({ post, loggedInUser }) {
         p.timestamp === post.timestamp ? { ...p, likes: updatedLikes } : p
       );
       allUsers[userIndex].posts = updatedPosts;
-      localStorage.setItem("allUsers", JSON.stringify(allUsers));
+      sessionStorage.setItem("allUsers", JSON.stringify(allUsers));
 
-      // Updating logged in user in localstorage
-      localStorage.setItem("loggedInUser", JSON.stringify(allUsers[userIndex]));
+      // Updating logged in user in sessionStorage
+      sessionStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(allUsers[userIndex])
+      );
     }
+  };
+
+  const handleCommentChange = (e) => {
+    setCommentText(e.target.value);
+  };
+
+  const handleCommentPost = () => {
+    if (commentText.trim() === "") return;
+
+    const newComment = {
+      user: loggedInUser.username,
+      comment: commentText,
+      timestamp: new Date().toISOString(),
+    };
+
+    const updatedComments = [...comments, newComment];
+    setComments(updatedComments);
+    setCommentText("");
+
+    // Update the comments in sessionStorage
+    const allUsers = JSON.parse(sessionStorage.getItem("allUsers"));
+    const userIndex = allUsers.findIndex(
+      (user) => user.username === loggedInUser.username
+    );
+
+    if (userIndex !== -1) {
+      const updatedPosts = allUsers[userIndex].posts.map((p) =>
+        p.timestamp === post.timestamp ? { ...p, comments: updatedComments } : p
+      );
+      allUsers[userIndex].posts = updatedPosts;
+      sessionStorage.setItem("allUsers", JSON.stringify(allUsers));
+
+      // Updating logged in user in sessionStorage
+      sessionStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(allUsers[userIndex])
+      );
+    }
+
+    // Notify the post owner
+    addNotification({
+      type: "comment",
+      message: `${loggedInUser.username}: commented on your post!`,
+      postId: post.timestamp,
+    });
   };
 
   return (
@@ -50,8 +112,9 @@ export default function Post({ post, loggedInUser }) {
       variant="outlined"
       sx={{
         minWidth: 300,
+        maxWidth: 700,
         "--Card-radius": (theme) => theme.vars.radius.xs,
-        marginY: "20px",
+        marginY: "auto",
       }}
     >
       <CardContent
@@ -135,7 +198,7 @@ export default function Post({ post, loggedInUser }) {
           fontWeight="lg"
           textColor="text.primary"
         >
-          {likes} likes
+          {likes} likes, {comments.length} comments
         </Link>
         <Typography fontSize="sm">
           <Link
@@ -154,9 +217,30 @@ export default function Post({ post, loggedInUser }) {
           fontSize="sm"
           startDecorator="…"
           sx={{ color: "text.tertiary" }}
+          onClick={() => setShowComments(!showComments)}
         >
-          more
+          {showComments ? "Hide comments" : "View comments"}
         </Link>
+        {showComments ? (
+          <Box sx={{ marginBottom: "8px" }}>
+            {comments.map((comment, index) => (
+              <Box key={index} sx={{ marginBottom: "4px" }}>
+                <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                  {comment.user}:
+                  <Typography sx={{ fontWeight: "500", marginLeft: "3px" }}>
+                    {comment.comment}
+                  </Typography>
+                </Typography>
+                <Typography sx={{ fontSize: "0.7rem" }}>
+                  {new Date(comment.timestamp).toLocaleString()}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        ) : (
+          ""
+        )}
+
         <Link
           component="button"
           underline="none"
@@ -174,9 +258,11 @@ export default function Post({ post, loggedInUser }) {
           variant="plain"
           size="sm"
           placeholder="Add a comment…"
+          value={commentText}
+          onChange={handleCommentChange}
           sx={{ flex: 1, px: 0, "--Input-focusedThickness": "0px" }}
         />
-        <Link disabled underline="none" role="button">
+        <Link underline="none" role="button" onClick={handleCommentPost}>
           Post
         </Link>
       </CardContent>
